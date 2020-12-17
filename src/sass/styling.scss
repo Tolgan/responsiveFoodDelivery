@@ -1,0 +1,11 @@
+$primary-colour:rgb(37, 98, 212);
+
+@mixin biseler($amount){ font-size:$amount ; padding:$amount ;background-color:rgb(165, 143, 143) ;
+
+}
+.utanmaz{font-family: sans-serif ; border:1px; font-size:30px}
+.adam{ @include biseler(40px) }
+
+.siz{text-align:center ;font-size:15px; color:$primary-colour} 
+.amk{@extend .utanmaz ;border:2px solid red; border-radius:499px  
+;}  

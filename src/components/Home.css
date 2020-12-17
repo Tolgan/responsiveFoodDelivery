@@ -1,0 +1,78 @@
+/* Small devices (landscape phones, 544px and up) */
+@media (max-width: 544px) {
+  p#cardText {
+    font-size: 10px;
+  } /*1rem = 16px*/
+}
+
+/* Medium devices (tablets, 768px and up) The navbar toggle appears at this breakpoint */
+@media (max-width: 700px) {
+  p#cardText {
+    font-size: 15px;
+  } /*1rem = 16px*/
+  .customCard {
+    height: 80vh;
+  }
+  .customBody {
+    height: 20%;
+  }
+  .customCard img {
+    height: 60%;
+  }
+  .customFooter {
+    height: 5%;
+  }
+  #homeSpan {
+    position: absolute;
+    top: 0;
+    border-radius: 0 0 15px 0;
+    left: 0;
+    background-color: white;
+    z-index: 5;
+    padding: 6px;
+    font-weight: bold;
+  }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .customCard {
+    height: 70vh;
+  }
+  .customCard img {
+    height: 40%;
+  }
+  p#cardText {
+    font-size: 0.8rem;
+  } /*1rem = 16px*/
+
+  #homeSpan {
+    position: absolute;
+    top: 0;
+    border-radius: 0 0 15px 0;
+    left: 0;
+    background-color: white;
+    z-index: 5;
+    padding: 6px;
+    font-weight: bold;
+  }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  p#cardText {
+    font-size: 0.9rem;
+  } /*1rem = 16px*/
+}
+
+/*
+::::::::::::::::::::::::::::::::::::::::::::::::::::
+Custom media queries
+*/
+
+/* Set width to make card deck cards 100% width */
+@media (min-width: 950px) and (max-width: 1100px) {
+  p#cardText {
+    font-size: 2rem;
+  }
+}
