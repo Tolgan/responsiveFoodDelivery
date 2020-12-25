@@ -178,7 +178,7 @@ const Restaurant = ({ match, location }) => {
               }}
             >
               <div id="orderContainer">
-                <Button>Order</Button>
+                <Button disabled={sumQty() === "No"}>Order</Button>
               </div>
             </Link>
           </div>

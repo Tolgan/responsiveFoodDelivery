@@ -1,17 +1,37 @@
 import React, { useState, useEffect } from "react";
 //import { COLORS, icons, images, SIZES, FONTS } from "../constants/index.js";
-import { categoryData, restaurantData } from "../constants/Home";
+import { restaurantData } from "../constants/Home";
 import { Card, Button, Col, Row, Container } from "react-bootstrap";
 import "./Home.css";
 import { Link } from "react-router-dom";
+import Map from "./Map";
 const Home = () => {
-  const [category, setCategory] = useState("");
+  // const [category, setCategory] = useState("");
   const [restaurants, setRestaurants] = useState([]);
+  const [map, setMap] = useState(false);
   useEffect(() => {
     setRestaurants(restaurantData);
   }, []);
+
+  const initialCurrentLocation = {
+    streetName: "Kuching",
+    gps: {
+      latitude: 1.5496614931250685,
+      longitude: 110.36381866919922,
+    },
+  };
+  const toggleChanger = () => {
+    setMap(!map);
+  };
   return (
     <Container>
+      <div className="myrow ">
+        <h4>Switch to Map view</h4>
+        <div id="topmenu" onClick={toggleChanger}>
+          <span className={!map ? "openmap activespan" : "openmap"}>Off</span>
+          <span className={map ? "openmap activespan" : "openmap"}>On</span>
+        </div>
+      </div>
       <Row className="mt-4">
         {restaurants.map((res) => (
           <Col
@@ -23,7 +43,7 @@ const Home = () => {
             className="customCard"
           >
             <Card style={{ width: "100%", height: "100%" }}>
-              <Card.Img variant="top" src={res.photo} rounded />
+              <Card.Img variant="top" src={res.photo} />
               <span id="homeSpan">{res.duration}</span>
               <Card.Body className="customBody">
                 <Card.Title>{res.name}</Card.Title>
@@ -42,6 +62,28 @@ const Home = () => {
           </Col>
         ))}
       </Row>
+      {map && (
+        <div className="openedmap">
+          <Map
+            currentLocation={initialCurrentLocation.gps}
+            restaurants={restaurants}
+          />
+          <span
+            onClick={() => setMap(false)}
+            style={{
+              right: 15,
+              top: 0,
+              zIndex: "10999",
+              color: "darkblue",
+              fontSize: 40,
+              cursor: "pointer",
+              position: "absolute",
+            }}
+          >
+            X
+          </span>
+        </div>
+      )}
     </Container>
   );
 };

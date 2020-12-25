@@ -1,3 +1,45 @@
+.myrow {
+  margin: 0 auto;
+  text-align: center;
+  width: 50vw;
+  margin-top: 10px;
+}
+#topmenu {
+  display: flex;
+  text-align: center;
+
+  background-color: red;
+  height: 30px;
+  width: 50px;
+  cursor: pointer;
+  margin: 0 auto;
+  border-radius: 15px;
+}
+
+.openmenu {
+  height: 100%;
+  width: 50%;
+  transition: 1s all ease-in;
+  background-color: red;
+}
+.activespan {
+  background-color: green;
+  border-radius: 15px;
+}
+.openedmap {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 9999;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgb(0, 0, 0, 0.7);
+}
+
 /* Small devices (landscape phones, 544px and up) */
 @media (max-width: 544px) {
   p#cardText {
@@ -28,7 +70,7 @@
     border-radius: 0 0 15px 0;
     left: 0;
     background-color: white;
-    z-index: 5;
+    z-index: -1;
     padding: 6px;
     font-weight: bold;
   }
