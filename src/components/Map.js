@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 //import { icons } from "../constants";
 import { Link } from "react-router-dom";
 import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
@@ -14,6 +14,11 @@ L.Icon.Default.mergeOptions({
 });
 
 const Map = ({ currentLocation, restaurants, resLocation, id }) => {
+  const [kilometre, setKilometre] = useState(null);
+
+  const rangeHandler = (e) => {
+    setKilometre(Number(e.target.value).toFixed(2));
+  };
   const center = resLocation
     ? [
         (currentLocation.latitude + resLocation.latitude) / 2,
@@ -22,12 +27,49 @@ const Map = ({ currentLocation, restaurants, resLocation, id }) => {
     : [currentLocation.latitude, currentLocation.longitude];
   const position1 = [currentLocation.latitude, currentLocation.longitude];
   const position2 = restaurants
-    ? restaurants.map((res) => [res.location.latitude, res.location.longitude])
-    : [[resLocation.latitude, resLocation.longitude]];
+    ? restaurants.map((res) => ({
+        position: [res.location.latitude, res.location.longitude],
+        id: res.id,
+        name: res.name,
+      }))
+    : { position: [resLocation.latitude, resLocation.longitude] };
 
-  console.log(position2);
+  let zoom = 14;
+  position2.forEach(
+    (pos) =>
+      (pos.distance = Number(
+        getDistanceFromLatLonInKm(pos.position[0], pos.position[1])
+      ))
+  );
 
-  let zoom = 15;
+  const filteredPositions = position2.filter(
+    (pos) => pos.distance <= kilometre
+  );
+  console.log(filteredPositions);
+  //https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula#:~:text=from%20math%20import%20cos%2C%20asin,*R*asin...
+  function getDistanceFromLatLonInKm(
+    lat1,
+    lon1,
+    lat2 = currentLocation.latitude,
+    lon2 = currentLocation.longitude
+  ) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2 - lat1); // deg2rad below
+    var dLon = deg2rad(lon2 - lon1);
+    var a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(deg2rad(lat1)) *
+        Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c; // Distance in km
+    return d.toFixed(2);
+  }
+
+  function deg2rad(deg) {
+    return deg * (Math.PI / 180);
+  }
 
   return (
     <div style={{ position: "relative", height: "80vh", width: "80vw" }}>
@@ -57,12 +99,55 @@ const Map = ({ currentLocation, restaurants, resLocation, id }) => {
           {" "}
           <Tooltip sticky>My Location</Tooltip>
         </Marker>
-        {position2.map((pos, index) => (
-          <Marker key={index} position={pos}>
-            <Tooltip sticky>Restaurant</Tooltip>
-          </Marker>
-        ))}
+        {kilometre
+          ? filteredPositions.map((pos) => (
+              <Marker key={pos.id} position={pos.position}>
+                <Tooltip sticky>
+                  {pos.name} {pos.distance}km away
+                </Tooltip>
+              </Marker>
+            ))
+          : position2.map((pos) => (
+              <Marker key={pos.id} position={pos.position}>
+                <Tooltip sticky>
+                  {pos.name} {pos.distance}km away
+                </Tooltip>
+              </Marker>
+            ))}
       </MapContainer>
+      {restaurants && (
+        <div
+          style={{
+            width: "30vw",
+            position: "absolute",
+            bottom: "0",
+            left: "30%",
+            zIndex: "99999",
+            margin: "0 auto",
+          }}
+        >
+          <input
+            onChange={(e) => rangeHandler(e)}
+            type="range"
+            min="0"
+            max="4"
+            step="0.1"
+            id="kilometre"
+            style={{ width: "40%", height: 3, borderRadius: 1 }}
+          />
+          <label style={{ color: "turquoise" }} htmlFor="kilometre">
+            Kilometre
+          </label>
+          <span style={{ color: "darkblue" }}>
+            {kilometre && ":" + kilometre + "km"}
+          </span>
+        </div>
+      )}
+      {restaurants && kilometre && (
+        <p style={{ color: "turquoise" }}>
+          {filteredPositions.length} Restaurants Match Your Criteria
+        </p>
+      )}
     </div>
   );
 };
